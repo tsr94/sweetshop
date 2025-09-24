@@ -37,6 +37,21 @@ public class AuthService {
 
     }
 
+    private void validateRegisterRequest(RegisterRequest req) {
+        if (req.getEmail() == null || req.getEmail().isEmpty()) {
+            throw new IllegalArgumentException("Email must not be empty");
+        }
+        if (userRepository.existsByEmail(req.getEmail())) {
+            throw new EmailAlreadyExistsException("Email already exists");
+        }
+        if (req.getUsername() == null || req.getUsername().isEmpty()) {
+            throw new IllegalArgumentException("Username must not be empty");
+        }
+        if (req.getPassword() == null || req.getPassword().isEmpty()) {
+            throw new IllegalArgumentException("Password must not be empty");
+        }
+    }
+
     public AuthResponse login(AuthRequest req) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(req.getEmail(), req.getPassword()));
