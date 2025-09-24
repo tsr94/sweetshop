@@ -58,4 +58,10 @@ public class AuthService {
         String token = jwtUtils.generateToken(authentication.getName());
         return new AuthResponse(token);
     }
+
+    private Authentication authenticateUser(AuthRequest request) {
+        UsernamePasswordAuthenticationToken authToken =
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
+        return authenticationManager.authenticate(authToken);
+    }
 }
