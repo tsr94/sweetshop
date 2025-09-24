@@ -6,6 +6,7 @@ import com.example.sweetshop.repository.SweetRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -51,4 +52,17 @@ class SweetServiceTest {
 
         assertThrows(IllegalArgumentException.class, () -> service.purchase(1L, 5));
     }
+
+    @Test
+    void searchByNameShouldReturnMatches() {
+        Sweet s = new Sweet();
+        s.setId(1L); s.setName("Ladoo"); s.setCategory("Traditional");
+        when(repo.findByNameContainingIgnoreCase("lad")).thenReturn(List.of(s));
+
+        List<Sweet> results = service.searchByName("lad");
+
+        assertEquals(1, results.size());
+        assertEquals("Ladoo", results.get(0).getName());
+    }
+
 }
