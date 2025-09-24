@@ -65,4 +65,37 @@ class SweetServiceTest {
         assertEquals("Ladoo", results.get(0).getName());
     }
 
+    @Test
+    void updateSweetShouldChangeValues() {
+        Sweet existing = new Sweet();
+        existing.setId(1L); existing.setName("Ladoo"); existing.setQuantity(10);
+        when(repo.findById(1L)).thenReturn(Optional.of(existing));
+        when(repo.save(any(Sweet.class))).thenAnswer(i -> i.getArgument(0));
+
+        SweetDto dto = new SweetDto(1L,"Barfi","Milk",30.0,20);
+        Sweet updated = service.updateSweet(1L, dto);
+
+        assertEquals("Barfi", updated.getName());
+        assertEquals(20, updated.getQuantity());
+    }
+
+    @Test
+    void deleteSweetShouldRemoveEntity() {
+        service.deleteSweet(1L);
+        verify(repo, times(1)).deleteById(1L);
+    }
+
+    @Test
+    void restockShouldIncreaseQuantity() {
+        Sweet s = new Sweet();
+        s.setId(1L); s.setQuantity(5);
+        when(repo.findById(1L)).thenReturn(Optional.of(s));
+
+        Sweet updated = service.restock(1L, 10);
+
+        assertEquals(15, updated.getQuantity());
+    }
+
+
+
 }
