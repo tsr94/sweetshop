@@ -2,6 +2,8 @@ package com.example.sweetshop.service;
 
 import com.example.sweetshop.dto.SweetDto;
 import com.example.sweetshop.entity.Sweet;
+import com.example.sweetshop.exception.InsufficientStockException;
+import com.example.sweetshop.exception.SweetNotFoundException;
 import com.example.sweetshop.repository.SweetRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,8 +48,11 @@ public class SweetService {
 
     @Transactional
     public Sweet purchase(Long id, int qty) {
-        Sweet s = repo.findById(id).orElseThrow(() -> new RuntimeException("Sweet not found"));
-        if (s.getQuantity() < qty) throw new IllegalArgumentException("Insufficient stock");
+        if(qty <= 0){
+            throw new IllegalArgumentException("Quantity must be greater than zero");
+        }
+        Sweet s = repo.findById(id).orElseThrow(() -> new SweetNotFoundException(id));
+        if (s.getQuantity() < qty) throw new InsufficientStockException(s.getName(),s.getQuantity(),qty);
         s.setQuantity(s.getQuantity() - qty);
         return s;
     }
