@@ -4,6 +4,7 @@ import com.example.sweetshop.dto.SweetDto;
 import com.example.sweetshop.entity.Sweet;
 import com.example.sweetshop.exception.InsufficientStockException;
 import com.example.sweetshop.exception.SweetNotFoundException;
+import com.example.sweetshop.mapper.SweetMapper;
 import com.example.sweetshop.repository.SweetRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,15 +37,15 @@ public class SweetService {
     public List<Sweet> searchByPriceRange(Double min, Double max) { return repo.findByPriceBetween(min, max); }
 
     public Sweet updateSweet(Long id, SweetDto dto) {
-        Sweet s = repo.findById(id).orElseThrow(() -> new RuntimeException("Sweet not found"));
-        s.setName(dto.getName());
-        s.setCategory(dto.getCategory());
-        s.setPrice(dto.getPrice());
-        s.setQuantity(dto.getQuantity());
+        Sweet s = repo.findById(id).orElseThrow(() -> new  SweetNotFoundException(id));
+        SweetMapper.updateEntityFromDto(s,dto);
         return repo.save(s);
     }
 
-    public void deleteSweet(Long id) { repo.deleteById(id); }
+    public void deleteSweet(Long id) {
+        Sweet s = repo.findById(id).orElseThrow(() -> new SweetNotFoundException(id));
+        repo.deleteById(id);
+    }
 
     @Transactional
     public Sweet purchase(Long id, int qty) {

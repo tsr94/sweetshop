@@ -2,7 +2,9 @@ package com.example.sweetshop.controller;
 
 import com.example.sweetshop.dto.SweetDto;
 import com.example.sweetshop.entity.Sweet;
+import com.example.sweetshop.mapper.SweetMapper;
 import com.example.sweetshop.service.SweetService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -39,10 +41,10 @@ public class SweetController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public Sweet update(@PathVariable Long id, @RequestBody SweetDto dto) {
-        return service.updateSweet(id, dto);
+    public ResponseEntity<SweetDto> update(@PathVariable Long id, @Valid @RequestBody SweetDto dto) {
+        Sweet updated = service.updateSweet(id, dto);
+        return ResponseEntity.ok(SweetMapper.toDto(updated));
     }
-
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
