@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/sweets")
@@ -19,24 +20,35 @@ public class SweetController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Sweet> addSweet(@RequestBody SweetDto dto) {
-        return ResponseEntity.ok(service.addSweet(dto));
+    public ResponseEntity<SweetDto> addSweet( @RequestBody SweetDto dto) {
+        Sweet created = service.addSweet(dto);
+        return ResponseEntity.ok(SweetMapper.toDto(created));
     }
 
     @GetMapping
     @PreAuthorize("isAuthenticated()")
-    public List<Sweet> listAll() { return service.listAll(); }
+    public List<SweetDto> listAll() {
+        return service.listAll()
+                .stream()
+                .map(SweetMapper::toDto)
+                .collect(Collectors.toList());
+    }
 
     @GetMapping("/search")
     @PreAuthorize("isAuthenticated()")
-    public List<Sweet> search(@RequestParam(required = false) String name,
+    public List<SweetDto> search(@RequestParam(required = false) String name,
                               @RequestParam(required = false) String category,
                               @RequestParam(required = false) Double minPrice,
                               @RequestParam(required = false) Double maxPrice) {
-        if (name != null) return service.searchByName(name);
-        if (category != null) return service.searchByCategory(category);
-        if (minPrice != null && maxPrice != null) return service.searchByPriceRange(minPrice, maxPrice);
-        return service.listAll();
+        List<Sweet> results;
+        if (name != null) results = service.searchByName(name);
+        else if (category != null) results = service.searchByCategory(category);
+        else if (minPrice != null && maxPrice != null) results = service.searchByPriceRange(minPrice, maxPrice);
+        else results =service.listAll();
+
+        return results.stream()
+                .map(SweetMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @PutMapping("/{id}")
@@ -54,13 +66,15 @@ public class SweetController {
 
     @PostMapping("/{id}/purchase")
     @PreAuthorize("isAuthenticated()")
-    public Sweet purchase(@PathVariable Long id, @RequestParam int qty) {
-        return service.purchase(id, qty);
+    public ResponseEntity<SweetDto> purchase(@PathVariable Long id, @RequestParam int qty) {
+        Sweet purchased = service.purchase(id, qty);
+        return ResponseEntity.ok(SweetMapper.toDto(purchased));
     }
 
     @PostMapping("/{id}/restock")
     @PreAuthorize("hasRole('ADMIN')")
-    public Sweet restock(@PathVariable Long id, @RequestParam int qty) {
-        return service.restock(id, qty);
+    public ResponseEntity<SweetDto> restock(@PathVariable Long id, @RequestParam int qty) {
+        Sweet restocked = service.restock(id, qty);
+        return ResponseEntity.ok(SweetMapper.toDto(restocked));
     }
 }
