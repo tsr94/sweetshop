@@ -20,7 +20,7 @@ public class SweetController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<SweetDto> addSweet( @RequestBody SweetDto dto) {
+    public ResponseEntity<SweetDto> addSweet(@Valid @RequestBody SweetDto dto) {
         Sweet created = service.addSweet(dto);
         return ResponseEntity.ok(SweetMapper.toDto(created));
     }
