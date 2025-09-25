@@ -32,7 +32,7 @@ public class AuthService {
         u.setUsername(req.getUsername());
         u.setEmail(req.getEmail());
         u.setPassword(passwordEncoder.encode(req.getPassword()));
-        u.setRole("ROLE_USER");
+        u.setRole(req.getRole());
         userRepository.save(u);
 
     }
