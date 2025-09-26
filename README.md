@@ -163,5 +163,15 @@ mvn spring-boot:run
 3. Browse sweets, search for your favorites, and manage purchases.
 4. Admin functionalities (add/update sweets) can be accessed via dedicated endpoints.
 
+## Screenshots
+1. Login Page
+<img width="1607" height="932" alt="image" src="https://github.com/user-attachments/assets/a7af232e-d013-43c6-927a-9b513a50a5a3" />
+2. Register Page
+   <img width="1896" height="928" alt="image" src="https://github.com/user-attachments/assets/7fb66c28-ac67-4646-a710-54a2e85d6c57" />
+3. Admin page
+   <img width="1897" height="927" alt="image" src="https://github.com/user-attachments/assets/c75298ff-3423-4c83-8e6b-9ee16f24b129" />
+4. User page 
+   <img width="1865" height="916" alt="image" src="https://github.com/user-attachments/assets/421a485b-b8eb-4383-a7c7-f6f79cd24494" />
+
 ---
 
