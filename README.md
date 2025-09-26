@@ -1,6 +1,6 @@
 # Sweet Shop Project
 
-**Developer:** Tilak  
+**Developer:** Tilakraj Singh Ranawat 
 **Roll No:** 23223092  
 **Organization Assignment:** Incubytes  
 
@@ -108,9 +108,10 @@ AI significantly accelerated development by providing templates, solving syntax 
 ### Backend Setup
 
 1. Make sure you have **Java 21** and **Maven** installed.
-2. Navigate to the backend directory:
+2. Clone the repository
 ```bash
-   cd sweetshop_Incubyte
+   git clone sweetshop/sweetshop_backend/
+   cd sweetshop-backend
 ````
 
 3. Install dependencies:
