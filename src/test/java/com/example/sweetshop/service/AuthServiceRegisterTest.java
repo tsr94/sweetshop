@@ -29,7 +29,7 @@ class AuthServiceRegisterTest {
 
     @Test
     void registerShouldSaveUser() {
-        RegisterRequest req = new RegisterRequest("alice", "alice@example.com", "password123");
+        RegisterRequest req = new RegisterRequest("alice", "alice@example.com", "password123","ADMIN");
         when(userRepository.existsByEmail(req.getEmail())).thenReturn(false);
         when(passwordEncoder.encode(req.getPassword())).thenReturn("encoded-password");
 
@@ -45,7 +45,7 @@ class AuthServiceRegisterTest {
 
     @Test
     void registerShouldThrowWhenEmailExists() {
-        RegisterRequest req = new RegisterRequest("bob", "bob@example.com", "pass");
+        RegisterRequest req = new RegisterRequest("bob", "bob@example.com", "pass","USER");
         when(userRepository.existsByEmail(req.getEmail())).thenReturn(true);
 
         try {

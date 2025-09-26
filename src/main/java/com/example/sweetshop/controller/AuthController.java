@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -21,8 +22,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest req) {
-        AuthResponse resp = service.login(req);
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody AuthRequest req) {
+        LoginResponse resp = service.login(req);
         return ResponseEntity.ok(resp);
     }
 }
